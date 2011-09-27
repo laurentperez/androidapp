@@ -36,6 +36,9 @@ public class MyActivity extends Activity {
     static final int TIME_DIALOG_ID_EXO = 0;
     static final int TIME_DIALOG_ID_PAUSE = 1;
 
+    final CharSequence[] exoTimes = {"0'25", "2'00", "2'30", "3'00", "4'00", "5'00"};
+    final CharSequence[] recupTimes = {"0'10", "1'00", "1'30", "2'00", "2'30", "3'00"};
+
     private Context ctx;
 
     @Override
@@ -121,7 +124,7 @@ public class MyActivity extends Activity {
                     public void onChronometerTick(Chronometer chrono) {
                         long seconds = ((SystemClock.elapsedRealtime() - chrono.getBase()) / 1000) % 60;
                         System.out.println("exoChronometer seconds = " + seconds + " cexoTime:" + cExoTime);
-                        if (seconds >= cExoTime ) {
+                        if (seconds >= cExoTime) {
                             // Toast.makeText(getApplicationContext(), "Début récupération", Toast.LENGTH_SHORT).show();
                             //
                             exoChronometer.stop();
@@ -152,8 +155,10 @@ public class MyActivity extends Activity {
         });
 
         // duree exo, pause par défaut
-        //mExoMinute = 5;
-        mPauseSeconds = 10;
+        exoTime = (String) exoTimes[0];
+        pauseTime = (String) recupTimes[0];
+        labelExoTime.setText(exoTimes[0]);
+        labelPauseTime.setText(recupTimes[0]);
     }
 
     private void setupAlarm(int time, String text) {
@@ -176,8 +181,6 @@ public class MyActivity extends Activity {
     }
 
     private Dialog getAlertDialog(int id) {
-        final CharSequence[] exoTimes = {"0'25", "2'00", "2'30", "3'00", "4'00", "5'00"};
-        final CharSequence[] recupTimes = {"0'10", "1'00", "1'30", "2'00", "2'30", "3'00"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         switch (id) {
             case TIME_DIALOG_ID_EXO:
