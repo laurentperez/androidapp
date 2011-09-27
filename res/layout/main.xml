@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <TextView android:id="@+id/labelExoDisplay"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Temps exo"/>
+    <TextView android:id="@+id/labelExoTime"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="0'00"/>
+    <Button android:id="@+id/pickExoTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Changer"/>
+
+    <TextView android:id="@+id/labelPauseDisplay"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Temps récup"/>
+    <TextView android:id="@+id/labelPauseTime"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="0'00"/>
+    <Button android:id="@+id/pickPauseTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Changer"/>
+
+    <Button android:id="@+id/startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start"/>
+    <Button android:id="@+id/stopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop"/>
+
+    <Chronometer android:id="@+id/exoChronometer"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"/>
+    <Chronometer android:id="@+id/pauseChronometer"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"/>
+
+    <Button android:text="Muscu"
+            android:id="@+id/next"
+            android:layout_width="250px"
+            android:textSize="18px"
+            android:layout_height="55px">
+    </Button>
+
+
+</LinearLayout>
