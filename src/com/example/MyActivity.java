@@ -123,6 +123,7 @@ public class MyActivity extends Activity {
                         System.out.println("exoChronometer seconds = " + seconds + " cexoTime:" + cExoTime);
                         if (seconds >= cExoTime ) {
                             // Toast.makeText(getApplicationContext(), "Début récupération", Toast.LENGTH_SHORT).show();
+                            //
                             exoChronometer.stop();
                             pauseChronometer.setBase(SystemClock.elapsedRealtime());
                             setupAlarm(cPauseTime, "Période de récupération terminée");
