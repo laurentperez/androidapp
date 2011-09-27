@@ -120,9 +120,10 @@ public class MyActivity extends Activity {
                 exoChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
                     public void onChronometerTick(Chronometer chrono) {
                         long seconds = ((SystemClock.elapsedRealtime() - chrono.getBase()) / 1000) % 60;
-                        System.out.println("exoChronometer seconds = " + seconds);
-                        if (seconds == cExoTime ) {
-                            Toast.makeText(getApplicationContext(), "Début récupération", Toast.LENGTH_SHORT).show();
+                        System.out.println("exoChronometer seconds = " + seconds + " cexoTime:" + cExoTime);
+                        if (seconds >= cExoTime ) {
+                            // Toast.makeText(getApplicationContext(), "Début récupération", Toast.LENGTH_SHORT).show();
+                            exoChronometer.stop();
                             pauseChronometer.setBase(SystemClock.elapsedRealtime());
                             setupAlarm(cPauseTime, "Période de récupération terminée");
                             pauseChronometer.start();
@@ -133,11 +134,11 @@ public class MyActivity extends Activity {
                 pauseChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
                     public void onChronometerTick(Chronometer chrono) {
                         long seconds = ((SystemClock.elapsedRealtime() - chrono.getBase()) / 1000) % 60;
-                        System.out.println("pauseChronometer seconds = " + seconds);
-                        if (seconds == cPauseTime) {
-                            Toast.makeText(getApplicationContext(), "Fin récupération", Toast.LENGTH_SHORT).show();
+                        System.out.println("pauseChronometer seconds = " + seconds + " pauseTime:" + cPauseTime);
+                        if (seconds >= cPauseTime) {
+                            //Toast.makeText(getApplicationContext(), "Fin récupération", Toast.LENGTH_SHORT).show();
                             pauseChronometer.stop();
-                            exoChronometer.stop();
+                            //exoChronometer.stop();
                             exoChronometer.setBase(SystemClock.elapsedRealtime());
                             setupAlarm(cExoTime, "Période de récupération en cours");
                             exoChronometer.start();
