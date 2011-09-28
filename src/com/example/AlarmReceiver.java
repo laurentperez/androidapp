@@ -1,12 +1,13 @@
 package com.example;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Vibrator;
 import android.widget.Toast;
 
 /**
@@ -22,8 +23,30 @@ public class AlarmReceiver extends BroadcastReceiver {
         try {
             Bundle bundle = intent.getExtras();
             String message = bundle.getString("alarm_message");
-            // Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            //vibre pendant 1 seconde, puis attend 1/2 secondes avant de recommencer.
+            vibrator.vibrate(new long[]{0, 600, 100, 600, 100}, -1);
+
+            final MediaPlayer mp = MediaPlayer.create(context, R.raw.beep2);
+            mp.setLooping(false);
+            mp.start();
+            Handler h = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    if (msg.what == 0) {
+                        mp.stop();
+                        mp.release();
+                    }
+                    super.handleMessage(msg);
+                }
+            };
+            Message m = new Message();
+            m.what = 0;
+            h.sendMessageDelayed(m, 6000);
+
+            /*
             NotificationManager mgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             int icon = R.drawable.icon;
             CharSequence tickerText = "EasyMuscu";
@@ -37,6 +60,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             notification.defaults |= Notification.DEFAULT_SOUND;
             notification.defaults |= Notification.DEFAULT_VIBRATE;
             mgr.notify(1, notification);
+            */
 
         } catch (Exception e) {
             Toast.makeText(context, "There was an error somewhere, but we still received an alarm", Toast.LENGTH_SHORT).show();

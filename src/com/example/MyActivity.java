@@ -51,6 +51,7 @@ public class MyActivity extends Activity {
     @Override
     protected void onResume() {
         System.out.println("onResume");
+        // TODO reprise des chronos
         super.onResume();
     }
 
@@ -58,6 +59,7 @@ public class MyActivity extends Activity {
     protected void onPause() {
         System.out.println("onPause");
         super.onPause();
+        // TODO pauser les chronos
     }
 
     @Override
