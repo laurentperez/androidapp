@@ -1,17 +1,18 @@
 package com.example;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.*;
 
 import java.util.Calendar;
 
@@ -75,6 +76,26 @@ public class SeriesActivity extends MenuActivity {
         });
     }
 
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case 0:
+                AlertDialog.Builder builder;
+                AlertDialog alertDialog;
+                Context mContext = this;
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+                View layout = inflater.inflate(R.layout.custom_dialog,
+                        (ViewGroup) findViewById(R.id.layout_root));
+                TextView text = (TextView) layout.findViewById(R.id.text);
+                text.setText("Commencez l'exercice puis appuyez sur un bouton pour déclencher un temps de récupération");
+                builder = new AlertDialog.Builder(mContext);
+                builder.setView(layout);
+                alertDialog = builder.create();
+                return alertDialog;
+        }
+        return super.onCreateDialog(id);
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main2);
@@ -84,6 +105,12 @@ public class SeriesActivity extends MenuActivity {
         final Button btwo = (Button) findViewById(R.id.btwo);
         final Button bthree = (Button) findViewById(R.id.bthree);
         final Button bfour = (Button) findViewById(R.id.bfour);
+        final ImageButton baide = (ImageButton) findViewById(R.id.baide);
+        baide.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                showDialog(0);
+            }
+        });
         serieChronometer = (Chronometer) findViewById(R.id.serieChronometer);
         registerListener(bone);
         registerListener(btwo);
