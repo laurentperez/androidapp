@@ -1,9 +1,12 @@
 <!--?xml version="1.0" encoding="utf-8"?-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/to_chrono"
+    <item android:id="@+id/toChrono"
           android:icon="@drawable/icon"
-          android:title="Ecran 2"/>
-    <item android:id="@+id/to_help"
+          android:title="Intervalles"/>
+    <item android:id="@+id/toSeries"
           android:icon="@drawable/icon"
-          android:title="Aide"/>
+          android:title="Series"/>
+    <item android:id="@+id/toInfo"
+          android:icon="@drawable/icon"
+          android:title="Info"/>
 </menu>

@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -16,37 +18,27 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class MyActivity extends Activity {
+public class MyActivity extends MenuActivity {
 
     private TextView labelExoTime;
     private String exoTime;
     private String pauseTime;
-
     private Button mPickExoTime;
-
     private TextView labelPauseTime;
     private Button mPickPauseTime;
-    private int mPauseSeconds;
 
     private Button startButton;
     private Button stopButton;
     private Chronometer exoChronometer;
     private Chronometer pauseChronometer;
 
-    static final int TIME_DIALOG_ID_EXO = 0;
-    static final int TIME_DIALOG_ID_PAUSE = 1;
+    private static final int DIALOG_INTERVALLE_TEMPSEXO = 0;
+    private static final int DIALOG_INTERVALLE_TEMPSRECUP = 1;
 
-    final CharSequence[] exoTimes = {"0'25", "2'00", "2'30", "3'00", "4'00", "5'00"};
-    final CharSequence[] recupTimes = {"0'10", "1'00", "1'30", "2'00", "2'30", "3'00"};
+    private final CharSequence[] exoTimes = {"0'25", "2'00", "2'30", "3'00", "4'00", "5'00"};
+    private final CharSequence[] recupTimes = {"0'10", "1'00", "1'30", "2'00", "2'30", "3'00"};
 
     private Context ctx;
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.option_menu, menu);
-        return true;
-    }
 
     @Override
     protected void onResume() {
@@ -65,6 +57,10 @@ public class MyActivity extends Activity {
     @Override
     protected void onRestart() {
         System.out.println("onRestart");
+        exoChronometer.stop();
+        pauseChronometer.stop();
+        exoChronometer.setBase(SystemClock.elapsedRealtime());
+        pauseChronometer.setBase(SystemClock.elapsedRealtime());
         super.onRestart();
     }
 
@@ -73,16 +69,10 @@ public class MyActivity extends Activity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        System.out.println("onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Button next = (Button) findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), ChronoActivity.class);
-                startActivityForResult(myIntent, 0);
-            }
 
-        });
         ctx = this;
         // capture elements ui
         labelExoTime = (TextView) findViewById(R.id.labelExoTime);
@@ -100,13 +90,13 @@ public class MyActivity extends Activity {
         // dialog exo
         mPickExoTime.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showDialog(TIME_DIALOG_ID_EXO);
+                showDialog(DIALOG_INTERVALLE_TEMPSEXO);
             }
         });
         // dialog pause
         mPickPauseTime.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showDialog(TIME_DIALOG_ID_PAUSE);
+                showDialog(DIALOG_INTERVALLE_TEMPSRECUP);
             }
         });
         stopButton.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +115,7 @@ public class MyActivity extends Activity {
                 exoChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
                     public void onChronometerTick(Chronometer chrono) {
                         long seconds = ((SystemClock.elapsedRealtime() - chrono.getBase()) / 1000) % 60;
-                        System.out.println("exoChronometer seconds = " + seconds + " cexoTime:" + cExoTime);
+                        Log.d("chrono", "exoChronometer seconds = " + seconds + " cexoTime:" + cExoTime);
                         if (seconds >= cExoTime) {
                             // Toast.makeText(getApplicationContext(), "Début récupération", Toast.LENGTH_SHORT).show();
                             //
@@ -140,7 +130,7 @@ public class MyActivity extends Activity {
                 pauseChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
                     public void onChronometerTick(Chronometer chrono) {
                         long seconds = ((SystemClock.elapsedRealtime() - chrono.getBase()) / 1000) % 60;
-                        System.out.println("pauseChronometer seconds = " + seconds + " pauseTime:" + cPauseTime);
+                        Log.d("chrono", "pauseChronometer seconds = " + seconds + " pauseTime:" + cPauseTime);
                         if (seconds >= cPauseTime) {
                             //Toast.makeText(getApplicationContext(), "Fin récupération", Toast.LENGTH_SHORT).show();
                             pauseChronometer.stop();
@@ -163,29 +153,26 @@ public class MyActivity extends Activity {
         labelPauseTime.setText(recupTimes[0]);
     }
 
-    private void setupAlarm(int time, String text) {
-        // get a Calendar object with current time
+    public void setupAlarm(int time, String text) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.SECOND, time);
         Intent intent = new Intent(ctx, AlarmReceiver.class);
         intent.putExtra("alarm_message", text);
-        // In reality, you would want to have a static variable for the request code instead of 192837
         PendingIntent sender = PendingIntent.getBroadcast(ctx, 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        // Get the AlarmManager service
         AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     }
 
-    private int toSeconds(String duration) {
+    public static int toSeconds(String duration) {
         String[] strings = duration.split("'");
-        int secs = Integer.parseInt(strings[0]) * 60 + Integer.parseInt(strings[1]);
-        return secs;
+        return (Integer.parseInt(strings[0]) * 60) + Integer.parseInt(strings[1]);
     }
 
-    private Dialog getAlertDialog(int id) {
+    @Override
+    protected Dialog onCreateDialog(int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         switch (id) {
-            case TIME_DIALOG_ID_EXO:
+            case DIALOG_INTERVALLE_TEMPSEXO:
                 builder.setTitle("Temps exercice");
                 builder.setItems(exoTimes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -196,7 +183,7 @@ public class MyActivity extends Activity {
                     }
                 });
                 return builder.create();
-            case TIME_DIALOG_ID_PAUSE:
+            case DIALOG_INTERVALLE_TEMPSRECUP:
                 builder.setTitle("Temps récupération");
                 builder.setItems(recupTimes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -208,25 +195,7 @@ public class MyActivity extends Activity {
                 });
                 return builder.create();
         }
-        return null;
+        return super.onCreateDialog(id);
     }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        return getAlertDialog(id);
-    }
-
-
-    // updates the time we display in the TextView
-    private void updateDisplay() {
-    }
-
-    private static String pad(int c) {
-        if (c >= 10)
-            return String.valueOf(c);
-        else
-            return "0" + String.valueOf(c);
-    }
-
 
 }

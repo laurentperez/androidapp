@@ -46,12 +46,6 @@
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"/>
 
-    <Button android:text="Muscu"
-            android:id="@+id/next"
-            android:layout_width="250px"
-            android:textSize="18px"
-            android:layout_height="55px">
-    </Button>
 
 
 </LinearLayout>

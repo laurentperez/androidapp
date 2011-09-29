@@ -14,24 +14,33 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
+        public static final int bfour=0x7f07000d;
+        public static final int bone=0x7f07000a;
+        public static final int bthree=0x7f07000c;
+        public static final int btwo=0x7f07000b;
         public static final int exoChronometer=0x7f070008;
         public static final int labelExoDisplay=0x7f070000;
         public static final int labelExoTime=0x7f070001;
+        public static final int labelInfo=0x7f070012;
         public static final int labelPauseDisplay=0x7f070003;
         public static final int labelPauseTime=0x7f070004;
-        public static final int next=0x7f07000a;
+        public static final int labelSeriesCount=0x7f07000f;
+        public static final int labelSeriesDisplay=0x7f07000e;
         public static final int pauseChronometer=0x7f070009;
         public static final int pickExoTime=0x7f070002;
         public static final int pickPauseTime=0x7f070005;
-        public static final int previous=0x7f07000b;
+        public static final int resetButton=0x7f070010;
+        public static final int serieChronometer=0x7f070011;
         public static final int startButton=0x7f070006;
         public static final int stopButton=0x7f070007;
-        public static final int to_chrono=0x7f07000c;
-        public static final int to_help=0x7f07000d;
+        public static final int toChrono=0x7f070013;
+        public static final int toInfo=0x7f070015;
+        public static final int toSeries=0x7f070014;
     }
     public static final class layout {
         public static final int main=0x7f030000;
         public static final int main2=0x7f030001;
+        public static final int main3=0x7f030002;
     }
     public static final class menu {
         public static final int option_menu=0x7f060000;

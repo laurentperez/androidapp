@@ -11,7 +11,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ChronoActivity" android:label="chronoActivity"/>
+        <activity android:name=".SeriesActivity" android:label="chronoActivity"/>
+        <activity android:name=".MenuActivity"/>
+        <activity android:name=".InfoActivity"/>
         <receiver android:process=":remote" android:name="AlarmReceiver"/>
     </application>
     <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
